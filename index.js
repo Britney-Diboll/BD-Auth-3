@@ -1,35 +1,39 @@
 let app = angular.module('myApp', ['ngRoute']);
 
-app.config(function () {
+app.config(function ($routeProvider) {
   $routeProvider
-  .when("/", {
-      templateUrl: "index.html",
-  })
-  .when("/index", {
-      templateUrl: "index.html",
-  })
-  .when("/landing", {
+    .when("/", {
       templateUrl: "landing.html",
-  })
+    })
+    .when("/landing", {
+      templateUrl: "landing.html",
+    })
+    .when("/test", {
+      templateUrl: "test.html",
+    });
 
 
-})
-.controller('myCtrl', function ($scope) {
+});
+
+app.controller('myCtrl', function ($scope) {
+  
+  let initUser = netlifyIdentity.currentUser();
 
   netlifyIdentity.on('init', () => {
     initUser = netlifyIdentity.currentUser();
+
     console.log(initUser);
   });
-  
-  
-  
+
+
+
   netlifyIdentity.on('login', () => {
     if (initUser == null) {
-        window.location.replace('#!landing');
+      window.location.replace('#!test');
     }
     netlifyIdentity.close();
   });
-  
+
   netlifyIdentity.on('logout', () => {
     netlifyIdentity.close();
     window.location.replace('/');
